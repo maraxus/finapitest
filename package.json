@@ -16,7 +16,11 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "generat:moduleuser":  "nest generate module user",
+    "generat:moduleauth":  "nest generate module auth",
+    "generat:modulewallet":  "nest generate module wallet",
+    "generat:common":  "nest generate module common"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
