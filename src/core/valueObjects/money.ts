@@ -1,13 +1,12 @@
 import { NegativeBalanceException } from '../exceptions/NegativeBalance';
-import { InvalidMoneyInput } from '../exceptions/InvalidMoneyInput';
 
 export class Money {
   private readonly amount: number
-  constructor(value: string) {
-    if (!isNaN(Number.parseFloat(value))) {
-      this.amount = Number.parseFloat(value) * 100;
+  constructor(value: number) {
+    if (Number.isInteger(value)) {
+      this.amount = value
     } else {
-      throw new InvalidMoneyInput()
+      this.amount = Number.parseFloat(value.toFixed(2)) * 100;
     }
   }
 
@@ -20,13 +19,12 @@ export class Money {
   }
 
   add(value: Money) {
-    return new Money(
-      (this.amount + value.rawAmount()).toFixed(2)
+    return new Money(Number(this.amount + value.rawAmount())
     )
   }
   take(value: Money) {
     if (this.lesserThan(value)) {
-      new Money((this.amount - value.rawAmount()).toFixed(2))
+      new Money((this.amount - value.rawAmount()))
     } else {
       throw new NegativeBalanceException()
     }
