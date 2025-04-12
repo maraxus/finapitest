@@ -3,28 +3,28 @@ import { NegativeBalanceException } from '../exceptions/NegativeBalance';
 export class Money {
   private readonly amount: number
   constructor(value: number) {
-    if (Number.isInteger(value)) {
-      this.amount = value
-    } else {
-      this.amount = Number.parseFloat(value.toFixed(2)) * 100;
+    if (value < 0) {
+      throw new NegativeBalanceException()
     }
+    this.amount = Number.parseFloat(value.toFixed(2)) * 100;
   }
 
   toString() {
-    return this.amount.toFixed(2)
+    return (this.amount / 100).toFixed(2)
   }
 
   rawAmount() {
     return this.amount
   }
 
-  add(value: Money) {
-    return new Money(Number(this.amount + value.rawAmount())
-    )
+  add(other: Money) {
+    const newValue = this.rawAmount() + other.rawAmount()
+    return new Money(newValue / 100)
   }
   take(value: Money) {
-    if (this.lesserThan(value)) {
-      new Money((this.amount - value.rawAmount()))
+    if (this.biggerThan(value)) {
+      const newValue = this.amount - value.rawAmount()
+      return new Money(newValue / 100)
     } else {
       throw new NegativeBalanceException()
     }
