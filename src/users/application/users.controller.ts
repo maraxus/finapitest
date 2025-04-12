@@ -10,7 +10,7 @@ export class UsersController {
     const user = new UserResponseDTO()
     user.name = "Waldo Banana"
     user.accountUid = "not-a-real-uuid"
-    user.accountBalance = new Money("235.78")
+    user.accountBalance = new Money(234.34)
     return user
   }
 }
