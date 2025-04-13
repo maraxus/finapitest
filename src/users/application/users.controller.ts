@@ -1,16 +1,13 @@
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { UserResponseDTO } from './response/UserResponseDTO';
 import { Money } from '../../core/valueObjects/money';
+import { CreateUserRequest } from './request/CreateUserRequest';
 
 @Controller('users')
 export class UsersController {
 
   @Post()
-  createUser(): UserResponseDTO {
-    const user = new UserResponseDTO()
-    user.name = "Waldo Banana"
-    user.accountUid = "not-a-real-uuid"
-    user.accountBalance = new Money(234.34)
-    return user
+  createUser(@Body() userInput: CreateUserRequest): UserResponseDTO {
+    return new UserResponseDTO(userInput.name, "not-a-real-uuid", new Money(Number.parseFloat(userInput.accountBalance)).toString())
   }
 }
