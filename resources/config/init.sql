@@ -9,7 +9,7 @@ GRANT ALL PRIVILEGES ON DATABASE walletdb TO wallet;
 CREATE TABLE "users" (
                          useruid uuid PRIMARY KEY,
                          name varchar(60) NOT NULL,
-                         username varchar(50) NOT NULL,
+                         username varchar(60) NOT NULL UNIQUE,
                          password varchar(300) NOT NULL
 );
 
@@ -21,13 +21,15 @@ CREATE TABLE "wallets" (
 
 CREATE TABLE "Transfers" (
                              transaction_id uuid PRIMARY KEY,
-                             origin uuid NOT NULL ,
-                             destination uuid NOT NULL,
+                             origin uuid NOT NULL REFERENCES wallets(walletuid),
+                             destination uuid NOT NULL REFERENCES wallets(walletuid),
                              value integer NOT NULL,
                              status text CHECK ( status IN ('pending', 'completed', 'reverted')) NOT NULL,
                              created timestamp NOT NULL,
                              completed timestamp,
                              reverted timestamp
+                             CHECK (origin <> destination),
+                             UNIQUE (origin, destination, created)
 );
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO wallet;
