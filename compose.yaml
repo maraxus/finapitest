@@ -9,13 +9,7 @@ services:
     environment:
       POSTGRES_PASSWORD: ${PGDBPASS?no postgres password set with env variable PGDBPASS}
     volumes:
-      - ./resources/data:/var/lib/postgresql/data
+      - ./resources/pg-data:/var/lib/postgresql/data
       - ./resources/config/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - 5432:5432
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
