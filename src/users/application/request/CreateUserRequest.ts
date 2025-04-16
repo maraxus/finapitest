@@ -3,6 +3,6 @@ export class CreateUserRequest {
     public name: string,
     public username: string,
     public password: string,
-    public accountBalance: string
+    public accountBalance: number
   ){}
 }
