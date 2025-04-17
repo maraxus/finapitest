@@ -1,42 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Money } from '../../../core/valueObjects/money';
-import { v7 as uuidv7 } from 'uuid';
-
-class UuidID {
-  private readonly id
-  constructor() {
-    this.id = uuidv7({ msecs: Date.now() })
-  }
-  toString() {
-    return this.id.toString()
-  }
-}
-
-export type UserUid = UuidID
-export type WalletUid = UuidID
+import { UserUid } from '../../../core/valueObjects/UuidID';
+import { User } from '../Entity/User';
+import { Wallet } from '../Entity/Wallet';
+import { AccountRepositoryInterface, AccountRepositoryToken } from '../Repository/AccountRepositoryInterface';
 
 export type CreatedUser = {
-  account: UserUid
-  name: string
-  username: string
+  account: UserUid,
+  name: string,
+  username: string,
   wallet: {
-    walletUid: WalletUid
     balance: Money
   }
 }
 
 @Injectable()
 export class CreateUser {
-  execute(name: string, username: string, password: string, initialBalance: number): Promise<CreatedUser> {
+  constructor(@Inject("AccountRepositoryInterface") private accountRepository: AccountRepositoryInterface) {}
+  async execute(name: string, username: string, password: string, initialBalance: number): Promise<CreatedUser> {
+    const user = new User(name, username, password)
+    const wallet = new Wallet(user, new Money(initialBalance))
+    const saved = await this.accountRepository.register(user, wallet)
+    return this.toOutput(saved);
+  }
 
-    return Promise.resolve({
-      account: new UuidID(),
-      name: name,
-      username: username,
-      wallet : {
-        walletUid: new UuidID(),
-        balance: new Money(initialBalance)
+  toOutput(savedAccount: [user: User, wallet: Wallet]): CreatedUser {
+    const [user, wallet] = savedAccount
+    return {
+      account: user.account,
+      name: user.name,
+      username: user.username,
+      wallet: {
+        balance: wallet.balance
       }
-    });
+    }
   }
 }
