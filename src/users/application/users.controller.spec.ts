@@ -21,7 +21,7 @@ describe('UsersController', () => {
   });
 
   it('should create user and respond with user response', async () => {
-    const input = new CreateUserRequest("Joana Banana", "banane", "moscounbanana", 33.00)
+    const input: CreateUserRequest =  { name: "Joana Banana", username: "banane", password: "moscounbanana", accountBalance: 33.22}
     const response: UserResponseDTO = await controller.createUserHandler(input)
     expect(response).toBeInstanceOf(UserResponseDTO)
   });
