@@ -10,24 +10,24 @@ describe('Money', () => {
   it('on creation, given a integer number, should create with amount equal to his value in cents', () => {
     const inputStr = 0 //same as 3425.00 or 342500 cents
     const myMoney = new Money(inputStr)
-    expect(myMoney.rawAmount()).toBe(inputStr * 100)
+    expect(Number(myMoney.rawAmount())).toBe(inputStr * 100)
   });
 
   it('on creation, given a float number, should create with amount equal to his value in cents', () => {
-    const [inputA, inputB, inputC, inputD, inputE] = [124.5, 124.56, 124.563, 0.75, 0.7]
+    const [inputA, inputB, inputC, inputD, inputE] = [1223.11, 124.56, 124.563, 0.75, 0.7]
     const [myMoneyA, myMoneyB, myMoneyC, myMoneyD, myMoneyE] = [new Money(inputA), new Money(inputB), new Money(inputC), new Money(inputD), new Money(inputE)]
-    expect(myMoneyA.rawAmount()).toBe(inputA * 100)
-    expect(myMoneyB.rawAmount()).toBe(inputB * 100)
-    expect(myMoneyC.rawAmount()).toBe(Number.parseFloat(inputC.toFixed(2)) * 100 )
-    expect(myMoneyD.rawAmount()).toBe(inputD * 100)
-    expect(myMoneyE.rawAmount()).toBe(inputE *100)
+    expect(Number(myMoneyA.rawAmount())).toBe(122311)
+    expect(Number(myMoneyB.rawAmount())).toBe(12456)
+    expect(Number(myMoneyC.rawAmount())).toBe(12456)
+    expect(Number(myMoneyD.rawAmount())).toBe(75)
+    expect(Number(myMoneyE.rawAmount())).toBe(70)
   })
 
   it('should be possible to add more money(integers)', () => {
     const myMoney = new Money(20)
     const creditA = new Money(1)
     const updatedBalance = myMoney.add(creditA)
-    expect(updatedBalance.rawAmount()).toBe((20*100)+(100))
+    expect(Number(updatedBalance.rawAmount())).toBe((20*100)+(100))
   })
 
   it('should present money as string with two digits to represent cents', () => {
@@ -50,7 +50,7 @@ describe('Money', () => {
     const myMoney = new Money(20)
     const debit = new Money(1)
     const updatedAmount = myMoney.take(debit)
-    expect(updatedAmount.rawAmount()).toBe(1900)
+    expect(Number(updatedAmount.rawAmount())).toBe(1900)
     expect(updatedAmount.toString()).toBe("19.00")
   })
 
@@ -58,7 +58,7 @@ describe('Money', () => {
     const myMoney = new Money(20.34)
     const debit = new Money(11.1)
     const updatedAmount = myMoney.take(debit)
-    expect(updatedAmount.rawAmount()).toBe((20.34 - 11.1) * 100)
+    expect(Number(updatedAmount.rawAmount())).toBe((20.34 - 11.1) * 100)
     expect(updatedAmount.toString()).toBe("9.24")
   })
 

@@ -1,16 +1,20 @@
 import { NegativeBalanceException } from '../exceptions/NegativeBalance';
 
 export class Money {
-  private readonly amount: number
-  constructor(value: number) {
+  private readonly amount: bigint
+  constructor(value: number | bigint) {
+    if (typeof value == 'bigint') {
+      this.amount = value
+      return
+    }
     if (value < 0) {
       throw new NegativeBalanceException()
     }
-    this.amount = Number.parseFloat(value.toFixed(2)) * 100;
+    this.amount = BigInt(Math.round(Number.parseFloat(value.toFixed(2)) * 100));
   }
 
   toString() {
-    return (this.amount / 100).toFixed(2)
+    return (Number(this.amount) / 100).toFixed(2)
   }
 
   rawAmount() {
@@ -19,12 +23,12 @@ export class Money {
 
   add(other: Money) {
     const newValue = this.rawAmount() + other.rawAmount()
-    return new Money(newValue / 100)
+    return new Money(Number(newValue) / 100)
   }
   take(value: Money) {
     if (this.biggerThan(value)) {
       const newValue = this.amount - value.rawAmount()
-      return new Money(newValue / 100)
+      return new Money(Number(newValue) / 100)
     } else {
       throw new NegativeBalanceException()
     }
